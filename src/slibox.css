@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+.slibox {
+    width: 100%;
+    display: block;
+    position: relative;
+    background: url(../img/loader.gif) no-repeat center;
+    margin-bottom: 50px
+}
+
+.slibox .sb-slide img::selection {
+    background: transparent
+}
+
+.slibox .sb-slides {
+    overflow: hidden;
+    height: inherit
+}
+
+.slibox .sb-slide {
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    height: inherit;
+    width: 100%;
+    display: none;
+    position: absolute;
+    z-index: 0
+}
+
+.slibox .sb-slide.active {
+    z-index: 1;
+    display: block;
+    width: 100%
+}
+
+.slibox .sb-slide-content {
+    display: block;
+}
+
+.slibox .sb-controllers {
+    padding-top: 24px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center
+}
+
+.slibox .sb-controller {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: #e25e5e;
+    border-radius: 50%;
+    margin: 0 3px;
+    transition: background .3s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .15)
+}
+
+.slibox .sb-controller:hover {
+    background: #2f323f;
+    border-color: #2f323f !important
+}
+
+.slibox .sb-controller.active {
+    border: 4px solid #e25e5e;
+    background: #ffffff
+}
+
+.slibox .sb-arrow {
+    z-index: 2;
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    top: calc(50% - 25px);
+    background: rgba(255, 255, 255, 1);
+    left: 20px;
+    border-radius: 50%;
+}
+
+.slibox .sb-arrow svg {
+    height: 20px;
+    display: block;
+    margin: 15px 16px
+}
+
+.slibox .sb-arrow-left svg {
+    margin-left: 14px
+}
+
+.slibox .sb-arrow-right {
+    left: auto;
+    right: 20px
+}
+
+.slibox .sb-error {
+    text-align: center;
+    color: #ffffff;
+    background-color: #e25e5e;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute
+}
+
+.slibox h1.sb-error {
+    border-radius: 3px;
+    padding: 15px 20px
+}
+
+.slibox h1.sb-error small {
+    font-size: 20px
+}
+
+.slibox .sb-timer-container {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    z-index: 10;
+}
+
+.slibox .sb-timer {
+    background: #e25e5e;
+    height: 4px;
+    width: 0;
+}
+.slibox .sb-timer.sb-timer-animate {
+    animation-name: sb-timer;
+    /* animation-iteration-count: infinite; */
+    animation-timing-function: linear;
+}
+
+@keyframes sb-timer {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
