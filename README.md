@@ -18,7 +18,7 @@
 <p>Slibox - it's a very fast, powerful, tiny slider. Mobile-friendly, easy to use.</p>
 <p>I hope it will be helpful for your development and, if you find mistakes, write me: <a href="mailto:oybek.odil@gmail.com">oybek.odili@gmail.com</a></p>
 <h2><a href="#start"><span class="red">#</span> Get Started</a></h2>
-<p>First, download this <a href="slibox-slider.zip">ZIP</a> and extract script and style files into your project.</p>
+<p>First, download and extract script and style files into your project.</p>
 <p>Then, insert links: <br>In the down of the <code>head</code> element: <br><code class="code"><span class="red">&lt;link</span> <span class="bool">href</span>=<span class="string">"<em>&lt;path to css-file&gt;</em>/slibox.min.css"</span><span class="red">&gt;</span></code></p>
 <p>In the down of the <code>body</code> element: <br><code class="code"><span class="red">&lt;script</span> <span class="bool">src</span>=<span class="string">"http://code.jquery.com/jquery-1.10.0.min.js"</span><span class="red">&gt;&lt;/script&gt;</span><br><span class="red">&lt;script</span> <span class="bool">src</span>=<span class="string">"<em>&lt;path to js-file&gt;</em>/slibox.min.js"</span><span class="red">&gt;&lt;/script&gt;</span></code></p>
 <p>Then:</p>
