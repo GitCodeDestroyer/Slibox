@@ -165,14 +165,18 @@ h1 {
 }
 
 #demo-slider .sb-slide-1 {
-    text-align: left;
+    text-align: center;
     color: #FFF;
-    padding: 3%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #demo-slider .sb-slide-1 p {
-    margin-left: 0;
+    position: absolute;
+    bottom: 4px;
+    background-color: rgba(60, 63, 80, 0.5);
+    width: 100%;
+    left: 0;
+    font-size: 16px;
 }
 
 .docs .sidebar {
@@ -243,19 +247,19 @@ h2 {
     color: #e25e5e
 }
 
-h2 a {
+.docs h2 a {
     color: #3c3f50
 }
 
-h3 {
+.docs h3 {
     margin: 30px 10px
 }
 
-h4 {
+.docs h4 {
     margin: 30px 10px 0 20px
 }
 
-p {
+.docs p {
     margin: 30px 20px
 }
 

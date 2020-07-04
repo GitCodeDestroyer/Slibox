@@ -24,8 +24,8 @@
     
                     this.slidingInterval = setInterval(function () {
                         if (!$(sliderId)[0].paused) {
-                            console.log($(sliderId).data('sb-timer-time') / 100, $(sliderId)[0].time);
-                            if ($(sliderId).data('sb-timer-time') / 100 != $(sliderId)[0].time) {
+                            // console.log($(sliderId).data('sb-timer-time') / 100, $(sliderId)[0].time);
+                            if ($(sliderId).data('sb-timer-time') / 100 != $(sliderId)[0].time - 1) {
                                 $(sliderId)[0].time++;
                             }else {
                                 if (($(sliderId).data('sb-timer-carousel') || $(sliderId).data('sb-active-slide') < $(sliderId).data('sb-slides-count'))) {
@@ -33,13 +33,12 @@
                                 }else {
                                     $(sliderId + ' .sb-timer').css('animation-play-state', 'paused');
                                 }
-                                $(sliderId)[0].time = 2;
+                                $(sliderId)[0].time = 0;
                             }
                         }
                     }, 100);
                 }
             }
-
 
             if (slideTo) {
                 $(sliderId).toggleClass('sb-last-slide', slideTo == $(sliderId).data('sb-slides-count'));
@@ -70,6 +69,16 @@
             }
         })
         return $(this).data('sb-active-slide');
+    }
+
+    $.fn.setTimeTo = function (time) {
+        this.each(function () {
+            $(this).data('sb-timer-time', time);
+            this.time = Math.ceil(this.time / time);
+            $('#' + this.id + ' .sb-timer').css('animation-duration', time + 'ms');
+            $('#' + this.id + ' .sb-timer').css('animation-play-state', 'running');
+        });
+        return $(this);
     }
 
     $.fn.slibox = function(options) {
@@ -155,16 +164,20 @@
                 if (slide.length != 0) {
                     slide = slide
                             .data('sb-slide', i)
+                            .attr('draggable', true)
                             .css({
                                 'background-image': 'url("' + o.imagesLinks[i - 1] + '")',
                                 'background-repeat': 'no-repeat'
-                            }).addClass('sb-slide-' + i).html('<div class="sb-slider-content">' + slide.html() + '</div>');
+                            })
+                            .addClass('sb-slide-' + i)
+                            .html('<div class="sb-slider-content">' + slide.html() + '</div>');
                 }else {
                     slide = $('<div/>', {
                         class: 'sb-slide sb-slide-' + i,
                         data: {
                             'sb-slide': i
                         },
+                        draggable: true,
                         css: {
                             'background-image': 'url("' + o.imagesLinks[i - 1] + '")',
                             'background-repeat': 'no-repeat'
@@ -297,12 +310,13 @@
             })
 
             $(el).hover(function () {
-                $('#' + this.id + ' .sb-timer').css('animation-play-state', 'paused');
-                $('#' + this.id)[0].paused = true;
+                let sliderId = '#' + this.id;
+                $(sliderId + ' .sb-timer').css('animation-play-state', 'paused');
+                $(sliderId)[0].paused = true;
             }, function () {
                 let sliderId = '#' + this.id;
-                $('#' + this.id + ' .sb-timer').css('animation-play-state', 'running');
-                $('#' + this.id)[0].paused = false;
+                $(sliderId + ' .sb-timer').css('animation-play-state', 'running');
+                $(sliderId)[0].paused = false;
             });
 
             $(el).slideTo($(el).data("sb-active-slide"), true);
@@ -314,26 +328,26 @@
                 box.on('selectstart', function () {
                     sbCanDrag = false;
                 });
-                let device = navigator.userAgent;
-                if (
-                (device.match(/(Android);?[\s\/]+([\d.]+)?/) ||
-                device.match(/(iPad).*OS\s([\d_]+)/) ||
-                device.match(/(iPod)(.*OS\s([\d_]+))?/) ||
-                device.match(/(iPhone\sOS)\s([\d_]+)/)) != null
-                ) {
-                    box.on('touchend', function (e) {
-                        if (e.target == box.children()[0] || e.target == box[0]) {
-                            $(el).slideTo($(this).data("sb-slide") + 1);
-                        }
-                    });
-                } else {
-                    box.mousedown(function(e) {
+                // let device = navigator.userAgent;
+                // if (
+                // (device.match(/(Android);?[\s\/]+([\d.]+)?/) ||
+                // device.match(/(iPad).*OS\s([\d_]+)/) ||
+                // device.match(/(iPod)(.*OS\s([\d_]+))?/) ||
+                // device.match(/(iPhone\sOS)\s([\d_]+)/)) != null
+                // ) {
+                //     box.on('touchend', function (e) {
+                //         if (e.target == box.children()[0] || e.target == box[0]) {
+                //             $(el).slideTo($(this).data("sb-slide") + 1);
+                //         }
+                //     });
+                // } else {
+                    box[0].ondragstart = function(e) {
                         if (sbCanDrag) {
                             this.startX = e.pageX - box[0].offsetLeft - container.offsetLeft
                             this.myDragFlag = !0
                         }
-                    })
-                    box.mouseup(function(e) {
+                    }
+                    box[0].ondragend = function(e) {
                         if (sbCanDrag) {
                             this.boxOffset = e.pageX - this.startX;
                             if (this.boxOffset - container.offsetLeft <= -20) {
@@ -346,8 +360,8 @@
                         }else {
                             sbCanDrag = true;
                         }
-                    })
-                }
+                    }
+                // }
             })
         })
     }

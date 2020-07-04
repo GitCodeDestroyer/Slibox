@@ -36,8 +36,7 @@
         <div id="demo-slider">
             <div class="sb-slides">
                 <div class="sb-slide">
-                    <h1>Hi!</h1>
-                    <p>You can add some content if you want!!!</p>
+                    <p>Dummy content with custom styles</p>
                 </div>
             </div>
         </div>
@@ -65,6 +64,7 @@
                 <a href="#slide">slideTo()</a>
                 <a href="#slide-next">slideToNext()</a>
                 <a href="#slide-prev">slideToPrev()</a>
+                <a href="#set-time">setTimeTo()</a>
             </div>
             <a href="#options-values">All Options</a>
             <a href="#changelog">Changelog</a>
@@ -154,11 +154,14 @@
                 <p>Template: <pre class="code"><code class="red">slideTo</code>(<code class="string">&lt;your element id (with #)&gt;</code>, <code class="num">&lt;slide's index that you want to show&gt;</code>)</pre></p>
                 <p>Example: <pre class="code"><code class="red">slideTo</code>(<code class="string">#demo-slider</code>, <code class="num">3</code>)</pre></p>
                 <h3 id="slide-next">slideToNext()</h3>
-                <p>Only you should call it to slider, and it will be slided to next slide, if active slide is the first and if <code>carousel</code> option is <code class="bool">true</code> it will ne slided to last slide, here is an example of code:</p>
+                <p>Only you should call it to slider, and it will be slided to next slide, if active slide is the first and if <code>carousel</code> option is <code class="bool">true</code> it will be slided to last slide, here is an example of code:</p>
                 <pre class="code"><code class="red">$</code>(<code class="string">'demo-slider'</code>).<code class="red">slideToNext</code>()</pre>
                 <h3 id="slide-prev">slideToPrev()</h3>
-                <p>Call this method to slider, and it will be slided to previous slide, if active slide is the last and if <code>carousel</code> option is <code class="bool">true</code> it will ne slided to first slide, here is an example of code:</p>
+                <p>Call this method to slider, and it will be slided to previous slide, if active slide is the last and if <code>carousel</code> option is <code class="bool">true</code> it will be slided to first slide, here is an example of code:</p>
                 <pre class="code"><code class="red">$</code>(<code class="string">'demo-slider'</code>).<code class="red">slideToNext</code>()</pre>
+                <h3 id="set-time">setTimeTo()</h3>
+                <p>Call this method to slider to modify timer's time (in milliseconds), here is an example of code:</p>
+                <pre class="code"><code class="red">$</code>(<code class="string">'demo-slider'</code>).<code class="red">setTimeTo</code>(3000)</pre>
             </div>
             <div class="part" id="options-values">
                 <h2><a href="#options-values"><span class="red">#</span> Options values types</a></h2>
