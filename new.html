@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="dist/slibox.min.css">
+    <style>
+        #demo {
+            width: 80%;
+            margin: 10%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="demo">
+        <div class="sb-slides">
+            <div class="sb-slide">
+                <p>Hello</p>
+            </div>
+        </div>
+    </div>
+    <script src="demo/assets/js/jquery.js"></script>
+    <script src="src/new.js"></script>
+    <script>
+        $('#demo').slibox({
+            imagesLinks: ['demo/assets/img/img (1).jpg', 'demo/assets/img/img (2).jpg', 'demo/assets/img/img (3).jpg', 'demo/assets/img/img (4).jpg', 'demo/assets/img/img (5).jpg', 'demo/assets/img/img (6).jpg'],
+            loaderLink: 'demo/assets/img/loader.gif',
+        });
+    </script>
+</body>
+</html>

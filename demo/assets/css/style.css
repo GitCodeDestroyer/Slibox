@@ -430,8 +430,13 @@ tr.odd {
         font-size: 65px
     }
 
+    .nav {
+        font-size: 16px;
+        height: 50px;
+    }
+
     .nav a {
-        margin: 15px 10px 15px -5px
+        margin: 3px 10px 10px -5px
     }
 
     .nav a.btn {
@@ -439,7 +444,7 @@ tr.odd {
     }
 
     .nav a:last-child {
-        margin: 15px 0
+        margin: 3px 0 10px 0
     }
 
     .docs table tr td {
@@ -452,5 +457,15 @@ tr.odd {
 
     .docs th {
         font-size: 18px
+    }
+}
+
+@media screen and (max-height: 500px) {
+    .download {
+        min-height: 400px;
+        font-size: 16px;
+    }
+    .download .side {
+        height: 400px;
     }
 }

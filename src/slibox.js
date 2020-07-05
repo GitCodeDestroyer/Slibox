@@ -1,4 +1,4 @@
-! function($) {
+!function($) {
     $.fn.slideTo = function (slideTo, fromTimer = false) {
         this.each(function () {
             let sliderId = '#' + this.id,
@@ -73,6 +73,7 @@
 
     $.fn.setTimeTo = function (time) {
         this.each(function () {
+            console.log($(this).data('sb-timer-time') / 100, $(this)[0].time);
             $(this).data('sb-timer-time', time);
             this.time = Math.ceil(this.time / time);
             $('#' + this.id + ' .sb-timer').css('animation-duration', time + 'ms');
@@ -342,6 +343,7 @@
                 //     });
                 // } else {
                     box[0].ondragstart = function(e) {
+                        console.log(e);
                         if (sbCanDrag) {
                             this.startX = e.pageX - box[0].offsetLeft - container.offsetLeft
                             this.myDragFlag = !0
