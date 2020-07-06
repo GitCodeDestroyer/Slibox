@@ -4,29 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="demo/assets/css/animate.css">
     <link rel="stylesheet" href="dist/slibox.min.css">
     <style>
-        #demo {
+        .sliders {
             width: 80%;
-            margin: 10%;
             height: 400px;
+            margin-left: 10%;
+            background-color: #000;
         }
     </style>
 </head>
 <body>
-    <div id="demo">
-        <div class="sb-slides">
-            <div class="sb-slide">
-                <p>Hello</p>
-            </div>
-        </div>
+    <div class="sliders" id="demo">
     </div>
+    <div class="sliders"></div>
     <script src="demo/assets/js/jquery.js"></script>
-    <script src="src/new.js"></script>
+    <script src="src/slibox.js"></script>
     <script>
-        $('#demo').slibox({
-            imagesLinks: ['demo/assets/img/img (1).jpg', 'demo/assets/img/img (2).jpg', 'demo/assets/img/img (3).jpg', 'demo/assets/img/img (4).jpg', 'demo/assets/img/img (5).jpg', 'demo/assets/img/img (6).jpg'],
+        $('.sliders').slibox({
+            imagesLinks: ['demo/assets/img/img (1).jpg', 'demo/assets/img/img (2).jpg', 'demo/assets/img/img (3).jpg'],
             loaderLink: 'demo/assets/img/loader.gif',
+            animateCSS: ['fadeIn', 'fadeInUp', 'zoomIn', 'zoomInDown'],
+            carousel: true,
+            imageSize: 'cover',
+            timerCarousel: false
         });
     </script>
 </body>

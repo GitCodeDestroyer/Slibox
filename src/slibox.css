@@ -9,7 +9,7 @@
     display: block;
     position: relative;
     background: url(../img/loader.gif) no-repeat center;
-    margin-bottom: 50px
+    margin-bottom: 70px
 }
 
 .slibox .sb-slide img::selection {
@@ -43,11 +43,8 @@
 }
 
 .slibox .sb-controllers {
-    padding-top: 24px;
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center
+    position: absolute;
+    bottom: -38px;
 }
 
 .slibox .sb-controller {
