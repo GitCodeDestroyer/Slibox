@@ -1,5 +1,5 @@
 (function($) {
-    let sliboxesInited = 0
+    let sliboxesInitiated = 0
 
     // All methods
     const methods = {
@@ -27,10 +27,10 @@
                 const $wrapper = $(this)
 
                 // Increase inited sliboxes to 1
-                sliboxesInited++
+                sliboxesInitiated++
 
                 // Init wrapper only
-                $wrapper.addClass('slibox').addClass('slibox-' + sliboxesInited).data('slibox', '.slibox-' + sliboxesInited)
+                $wrapper.addClass('slibox').addClass('slibox-' + sliboxesInitiated).data('slibox', '.slibox-' + sliboxesInitiated)
                 const wrapperSelector = $wrapper.data('slibox')
 
                 // Check, if there is no slides wrapper, create it
