@@ -1,3 +1,5 @@
+let test
+
 (function($) {
     let sliboxesInitiated = 0
 
@@ -85,12 +87,12 @@
                         }).appendTo(wrapperSelector + ' .sb-slides')
                     } else {
                         slide.data({
-                            'slide': i,
-                            'canDrag': true,
-                            'boxOffset': false,
-                            'myDragFlag': false,
-                            'startX': false
-                        }).attr('draggable', true)
+                                'slide': i,
+                                'canDrag': true,
+                                'boxOffset': false,
+                                'myDragFlag': false,
+                                'startX': false
+                            }).attr('draggable', true)
                             .css({
                                 'background-image': 'url("' + extOptions.imagesLinks[i - 1] + '")',
                                 'background-repeat': 'no-repeat'
@@ -153,6 +155,8 @@
 
                 // init Animate.css
                 $wrapper.slibox('initAnimateCSS', extOptions.animateCSS)
+
+                test = $wrapper.data()
             })
         },
 
@@ -291,6 +295,45 @@
             return this
         },
 
+        // Setting timer's time
+        setTime: function(time) {
+            this.each(function() {
+                const $wrapper = $(this),
+                    timer = $($wrapper.data('slibox') + ' .sb-timer')
+
+                $wrapper.data({
+                    'timerTime': time,
+                    'timeCounter': Math.ceil($wrapper.data('timeCounter') / time)
+                })
+
+                timer.css({
+                    'animation-duration': time + 'ms',
+                    'animation-play-state': 'running'
+                })
+            })
+            return this
+        },
+
+        // Method for reloading the timer
+        reloadTimer: function() {
+            this.each(function() {
+                const $wrapper = $(this),
+                    wrapperSelector = $wrapper.data('slibox'),
+                    timer = $(wrapperSelector + ' .sb-timer')
+
+                timer.removeClass('sb-timer-animate')
+
+                setTimeout(function() {
+                    timer.addClass('sb-timer-animate')
+                    $wrapper.data('time', 0)
+                }, 100)
+
+
+                clearInterval(this.slidingInterval)
+            })
+            return this
+        },
+
         // Method for initializing animations
         initAnimateCSS: function(animations) {
             this.each(function() {
@@ -394,45 +437,6 @@
             return this
         },
 
-        // Setting timer's time
-        setTime: function(time) {
-            this.each(function() {
-                const $wrapper = $(this),
-                    timer = $($wrapper.data('slibox') + ' .sb-timer')
-
-                $wrapper.data({
-                    'timerTime': time,
-                    'timeCounter': Math.ceil($wrapper.data('timeCounter') / time)
-                })
-
-                timer.css({
-                    'animation-duration': time + 'ms',
-                    'animation-play-state': 'running'
-                })
-            })
-            return this
-        },
-
-        // Method for reloading the timer
-        reloadTimer: function() {
-            this.each(function() {
-                const $wrapper = $(this),
-                    wrapperSelector = $wrapper.data('slibox'),
-                    timer = $(wrapperSelector + ' .sb-timer')
-
-                timer.removeClass('sb-timer-animate')
-
-                setTimeout(function() {
-                    timer.addClass('sb-timer-animate')
-                    $wrapper.data('time', 0)
-                }, 100)
-
-
-                clearInterval(this.slidingInterval)
-            })
-            return this
-        },
-
         // This method slides to slide, that you choosed
         slideTo: function(slideTo) {
             if ('number' != typeof slideTo) {
@@ -518,5 +522,6 @@
         } else if (typeof method === 'object' || !method) {
             return methods.init.apply(this, arguments)
         }
+        console.log(test)
     }
 })(jQuery)
