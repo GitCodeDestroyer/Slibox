@@ -160,7 +160,7 @@
             }
 
             for (let i = 1; i <= o.imagesLinks.length; i++) {
-                let slide = $(el + ' .sb-slides .sb-slide:nth-of-type(' + i + ')');
+                let slide = $(el + ' .sb-slides .sb-slide:nth-of-type(' + i + ')')
                 if (slide.length != 0) {
                     slide = slide
                             .data('sb-slide', i)

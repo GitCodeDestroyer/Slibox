@@ -1,6 +1,9 @@
 (function($) {
     let sliboxesInited = 0
+
+    // All methods
     const methods = {
+        // This method inits slider
         init: function(options) {
             // Options defaults
             let extOptions = Object.assign({
@@ -22,22 +25,31 @@
 
             return this.each(function() {
                 const $wrapper = $(this)
+
+                // Increase inited sliboxes to 1
                 sliboxesInited++
 
+                // Init wrapper only
                 $wrapper.addClass('slibox').addClass('slibox-' + sliboxesInited).data('slibox', '.slibox-' + sliboxesInited)
+                const wrapperSelector = $wrapper.data('slibox')
 
-                // Check is there are images or not. If not, throw an error
-                if ('object' != typeof extOptions.imagesLinks || 0 == extOptions.imagesLinks.length) {
-                    extOptions.imagesLinks = []
-                    $wrapper.html('<div class="sb-error">' + extOptions.noImagesMessage + '</div>')
+                // Check, if there is no slides wrapper, create it
+                if (!$.contains($wrapper, $('.sb-slides'))) {
+                    $('<div/>', {
+                        class: 'sb-slides'
+                    }).appendTo(wrapperSelector)
+                    // Check is there are images or not. If not, throw an error
+                    if ('object' != typeof extOptions.imagesLinks || 0 == extOptions.imagesLinks.length) {
+                        extOptions.imagesLinks = []
+                        $wrapper.html('<div class="sb-error">' + extOptions.noImagesMessage + '</div>')
+                    }
                 }
 
                 ////////////////////
                 // Start initing
                 ////////////////////
-                const wrapperSelector = $wrapper.data('slibox')
 
-                const slidesCount = extOptions.imagesLinks.length
+                const slidesCount = extOptions.imagesLinks.length > 0 ? extOptions.imagesLinks.length : $(wrapperSelector + ' .sb-slide').length
 
                 // Set all of the data to this element
                 $wrapper.data({
@@ -51,25 +63,68 @@
                     carousel: extOptions.carousel
                 })
 
-                // Check, if there is no slides wrapper, create it
-                if (!$.contains($wrapper, $('.sb-slides'))) {
-                    $('<div/>', {
-                        class: 'sb-slides'
-                    }).appendTo(el)
-                }
-
+                let slide
                 // A loop for creating slides
                 for (let i = 1; i <= slidesCount; i++) {
-                    $('<div/>', {
-                        class: 'sb-slide sb-slide-' + i,
-                        data: {
-                            'sb-slide': i
-                        },
-                        css: {
-                            'background-image': 'url("' + extOptions.imagesLinks[i - 1] + '")',
-                            'background-repeat': 'no-repeat'
+                    slide = $(wrapperSelector + ' .sb-slides .sb-slide-' + i)
+                    if (slide.length == 0) {
+                        slide = $('<div/>', {
+                            class: 'sb-slide sb-slide-' + i,
+                            data: {
+                                'slide': i,
+                                'canDrag': true,
+                                'boxOffset': false,
+                                'myDragFlag': false,
+                                'startX': false
+                            },
+                            draggable: true,
+                            css: {
+                                'background-image': 'url("' + extOptions.imagesLinks[i - 1] + '")',
+                                'background-repeat': 'no-repeat'
+                            }
+                        }).appendTo(wrapperSelector + ' .sb-slides')
+                    } else {
+                        slide.data({
+                            'slide': i,
+                            'canDrag': true,
+                            'boxOffset': false,
+                            'myDragFlag': false,
+                            'startX': false
+                        }).attr('draggable', true)
+                            .css({
+                                'background-image': 'url("' + extOptions.imagesLinks[i - 1] + '")',
+                                'background-repeat': 'no-repeat'
+                            })
+                            .addClass('sb-slide-' + i)
+                            .html('<div class="sb-slider-content">' + slide.html() + '</div>');
+                    }
+
+                    // When user selects some text, disable dragging
+                    slide[0].onselectstart = function() {
+                        slide.data('canDrag', false)
+                    }
+
+                    slide[0].ondragstart = function(e) {
+                        if (slide.data('canDrag')) {
+                            slide.data('startX', e.pageX - slide[0].offsetLeft - $wrapper[0].offsetLeft)
+                            slide.myDragFlag = !0
                         }
-                    }).appendTo(el + ' .sb-slides')
+                    }
+
+                    slide[0].ondragend = function(e) {
+                        if (slide.data('canDrag')) {
+                            slide.data('boxOffset', e.pageX - slide.data('startX'))
+                            if (slide.data('boxOffset') - $wrapper[0].offsetLeft <= -20) {
+                                $wrapper.slibox('slideToNext')
+                            }
+                            if (slide.boxOffset - $wrapper[0].offsetLeft >= 20) {
+                                $wrapper.slibox('slideToPrev')
+                                slide.myDragFlag = !1
+                            }
+                        } else {
+                            canDrag = true;
+                        }
+                    }
                 }
 
                 // Load loader image
@@ -96,11 +151,12 @@
                 // Method for sliding to slide
                 $wrapper.slibox('slideTo', extOptions.activeSlide)
 
-                // initAnimateCSS
+                // init Animate.css
                 $wrapper.slibox('initAnimateCSS', extOptions.animateCSS)
             })
         },
 
+        // Method for setting a link for loader
         loader: function(link) {
             this.each(function() {
                 if ('string' == typeof link) {
@@ -116,8 +172,8 @@
         initControllers: function() {
             this.each(function() {
                 const $wrapper = $(this),
-                      wrapperSelector = $wrapper.data('slibox'),
-                      controllersWrapper = $(wrapperSelector + ' .sb-controllers')
+                    wrapperSelector = $wrapper.data('slibox'),
+                    controllersWrapper = wrapperSelector + ' .sb-controllers'
 
                 $('<div/>', {
                     class: 'sb-controllers',
@@ -139,7 +195,7 @@
                     })
                 }
 
-                controllersWrapper.css({
+                $(controllersWrapper).css({
                     width: $wrapper.data('slidesCount') * 22,
                     marginLeft: ($wrapper.width() - $wrapper.data('slidesCount') * 22) / 2
                 })
@@ -155,10 +211,11 @@
             return this
         },
 
+        // Method for initing arrows
         initArrows: function() {
             this.each(function() {
                 const $wrapper = $(this),
-                      wrapperSelector = $wrapper.data('slibox')
+                    wrapperSelector = $wrapper.data('slibox')
 
                 // Left arrow
                 $('<div/>', {
@@ -187,6 +244,7 @@
             return this
         },
 
+        // Method for destroying arrows
         destroyArrows: function() {
             $(this).children('.sb-arrow').remove()
             return this
@@ -196,7 +254,7 @@
         initTimer: function() {
             this.each(function() {
                 const $wrapper = $(this),
-                      wrapperSelector = $wrapper.data('slibox')
+                    wrapperSelector = $wrapper.data('slibox')
 
                 $('<div/>', {
                     class: 'sb-timer-container',
@@ -206,6 +264,7 @@
                 })).appendTo($wrapper)
                 $wrapper.data('timeCounter', 2)
 
+                // When user hover cursor (or click to wrapper in mobile brower) to slider, timer will be paused 
                 $wrapper.hover(function() {
                     $(wrapperSelector + ' .sb-timer').css('animation-play-state', 'paused')
                     $wrapper.data('paused', true)
@@ -217,20 +276,26 @@
             return this
         },
 
+        // Method for destroying a timer
         destroyTimer: function() {
             this.each(function() {
                 const $wrapper = $(this)
 
                 $wrapper.unbind('hover')
                 $wrapper.children('.sb-timer-container').remove()
+                $wrapper.data({
+                    'timeCounter': 0,
+                    'paused': false
+                })
             })
             return this
         },
 
+        // Method for initializing animations
         initAnimateCSS: function(animations) {
             this.each(function() {
                 const $wrapper = $(this),
-                      slides = $($wrapper.data('slibox') + ' .sb-slide')
+                    slides = $($wrapper.data('slibox') + ' .sb-slide')
                 let slide
 
                 if ('object' == typeof animations) {
@@ -250,11 +315,12 @@
             return this
         },
 
+        // Method for add an image size for every slider
         imageSize: function(imagesSizes) {
             this.each(function() {
                 const $wrapper = $(this),
-                      wrapperSelector = $wrapper.data('slibox'),
-                      slides = $(wrapperSelector + ' .sb-slide')
+                    wrapperSelector = $wrapper.data('slibox'),
+                    slides = $(wrapperSelector + ' .sb-slide')
                 let slide
 
                 if ('object' == typeof imagesSizes) {
@@ -279,11 +345,12 @@
             return this
         },
 
+        // Method for add an image position for every slider
         imagePosition: function(imagesPositions) {
             this.each(function() {
                 const $wrapper = $(this),
-                      wrapperSelector = $wrapper.data('slibox'),
-                      slides = $(wrapperSelector + ' .sb-slide')
+                    wrapperSelector = $wrapper.data('slibox'),
+                    slides = $(wrapperSelector + ' .sb-slide')
                 let slide
 
                 if ('object' == typeof imagesPositions) {
@@ -308,19 +375,20 @@
             return this
         },
 
-        // Setting of active slide
+        // Method for setting active slide
         activeSlide: function(activeSlide) {
             this.each(function() {
                 const $wrapper = $(this),
-                      slidesCount = $wrapper.data('slidesCount')
+                    slidesCount = $wrapper.data('slidesCount')
 
                 if ('number' == typeof activeSlide) {
                     if (activeSlide > slidesCount) {
                         $wrapper.data('activeSlide', slidesCount)
                     } else if (activeSlide < 1) {
                         $wrapper.data('activeSlide', 1)
+                    } else {
+                        $wrapper.data('activeSlide', activeSlide)
                     }
-                    $wrapper.data('activeSlide', activeSlide)
                 }
             })
             return this
@@ -330,10 +398,12 @@
         setTime: function(time) {
             this.each(function() {
                 const $wrapper = $(this),
-                      timer = $($wrapper.data('slibox') + ' .sb-timer')
+                    timer = $($wrapper.data('slibox') + ' .sb-timer')
 
-                $wrapper.data('timerTime', time)
-                $wrapper.data('timeCounter', Math.ceil($wrapper.data('timeCounter') / time))
+                $wrapper.data({
+                    'timerTime': time,
+                    'timeCounter': Math.ceil($wrapper.data('timeCounter') / time)
+                })
 
                 timer.css({
                     'animation-duration': time + 'ms',
@@ -343,14 +413,15 @@
             return this
         },
 
+        // Method for reloading the timer
         reloadTimer: function() {
             this.each(function() {
                 const $wrapper = $(this),
-                      wrapperSelector = $wrapper.data('slibox'),
-                      timer = $(wrapperSelector + ' .sb-timer')
+                    wrapperSelector = $wrapper.data('slibox'),
+                    timer = $(wrapperSelector + ' .sb-timer')
 
                 timer.removeClass('sb-timer-animate')
-    
+
                 setTimeout(function() {
                     timer.addClass('sb-timer-animate')
                     $wrapper.data('time', 0)
@@ -370,10 +441,10 @@
             }
             this.each(function() {
                 const $wrapper = $(this),
-                      wrapperSelector =  $wrapper.data('slibox'),
-                      slide = $(wrapperSelector + ' .sb-slide'),
-                      controller  = $(wrapperSelector + ' .sb-controller'),
-                      slidesCount = $wrapper.data('slidesCount')
+                    wrapperSelector = $wrapper.data('slibox'),
+                    slide = $(wrapperSelector + ' .sb-slide'),
+                    controller = $(wrapperSelector + ' .sb-controller'),
+                    slidesCount = $wrapper.data('slidesCount')
 
                 if ($wrapper.data('carousel')) {
                     if (slideTo > slidesCount) {
@@ -399,7 +470,7 @@
 
                 $wrapper.slibox('reloadTimer')
 
-                this.slidingInterval = setInterval(function () {
+                this.slidingInterval = setInterval(function() {
                     const time = $wrapper.data('timeCounter')
                     if (!$wrapper.data('paused')) {
                         if ($wrapper.data('timerTime') / 100 != time - 1) {
@@ -418,6 +489,7 @@
             return this
         },
 
+        // Method for sliding to next slide
         slideToNext: function() {
             this.each(function() {
                 const $wrapper = $(this)
@@ -427,6 +499,7 @@
             return this
         },
 
+        // Method for sliding to previous slide
         slideToPrev: function() {
             this.each(function() {
                 const $wrapper = $(this)
@@ -437,8 +510,9 @@
         }
     }
 
+    // Setting plugin
     $.fn.slibox = function(method = 'init') {
-        // Methods Logic
+        // if method is not an object, do this method, either do init method
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1))
         } else if (typeof method === 'object' || !method) {
