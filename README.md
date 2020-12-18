@@ -297,3 +297,5 @@ Click Here!
 <p>- Can be used custom animations.</p>
 <p>- Animate.css integration.</p>
 <p>- Sliding with timer.</p>
+
+Odilov Oybek
